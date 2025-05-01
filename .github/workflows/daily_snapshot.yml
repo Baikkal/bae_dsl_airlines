@@ -1,0 +1,40 @@
+# .github/workflows/daily_snapshot.yml
+name: 📦 Daily FR24 Snapshot
+
+on:
+  # Exécution quotidienne selon UTC
+  schedule:
+    # Ici : tous les jours à 21:59 UTC → 23:59 CEST
+    - cron:  '59 21 * * *'
+  workflow_dispatch:  # permet de lancer manuellement depuis GitHub
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # ou 3.x selon votre venv
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Installez brotli et requests si ce n'est pas déjà dans requirements.txt
+          pip install brotli requests
+          # Puis vos dépendances habituelles
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: 🚀 Run snapshot script
+        run: |
+          python src/extraction/snapshot_airports.py
+
+      - name: 📁 Upload snapshots as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: fr24-snapshots-${{ github.run_date }}
+          path: snapshots/
+          retention-days: 7

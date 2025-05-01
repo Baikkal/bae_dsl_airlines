@@ -1,0 +1,7 @@
+# Environnements & secrets
+.env
+.venv/
+
+# Snapshots, logs, etc.
+snapshots/
+snapshot.log
