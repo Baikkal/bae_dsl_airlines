@@ -33,7 +33,7 @@ jobs:
           python src/extraction/snapshot_airports.py
 
       - name: 📁 Upload snapshots as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: fr24-snapshots-${{ github.run_date }}
           path: snapshots/
