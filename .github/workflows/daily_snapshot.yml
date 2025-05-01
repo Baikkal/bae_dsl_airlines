@@ -25,6 +25,7 @@ jobs:
           python -m pip install --upgrade pip
           # Installez brotli et requests si ce n'est pas déjà dans requirements.txt
           pip install brotli requests
+          pip install FlightRadarAPI brotli requests
           # Puis vos dépendances habituelles
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
