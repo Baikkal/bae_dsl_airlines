@@ -31,7 +31,10 @@ for airport_dir in SNAPSHOT_DIR.iterdir():
     airport = airport_dir.name
     # Iterate each JSON page file
     for json_file in airport_dir.glob(f"{airport.lower()}_snapshot_p*_*.json"):
-        ts = json_file.stem.split("_")[-1]  # extract timestamp
+        # Example filename: cdg_snapshot_p1_20240501_002749.json
+        # We want the full YYYYMMDD_HHMMSS timestamp from the stem
+        parts = json_file.stem.split("_")
+        ts = "_".join(parts[-2:])
         data = json.loads(json_file.read_text(encoding="utf-8"))
         arrivals = data["airport"]["pluginData"]["schedule"]["arrivals"]["data"]
         departures = data["airport"]["pluginData"]["schedule"]["departures"]["data"]
